@@ -81,6 +81,15 @@ public class RoomPlacer : EditorWindow
             }
         }
 
+        if(Event.current.keyCode == KeyCode.B && Event.current.type == EventType.KeyDown)
+        {
+            RotateFunction(-1f);
+        }
+        if (Event.current.keyCode == KeyCode.N && Event.current.type == EventType.KeyDown)
+        {
+            RotateFunction(1f);
+        }
+
         if (Event.current.keyCode == KeyCode.Space && Event.current.type == EventType.KeyDown)
         {
             PlaceRoom();
@@ -119,10 +128,10 @@ public class RoomPlacer : EditorWindow
             rect.x += rect.width + 30;
            
             if (GUI.Button(new Rect(1000, 170, 50, 30), "+ 90°"))
-                TryFunction(1f);
+                RotateFunction(1f);
 
             if (GUI.Button(new Rect(1000, 220, 50, 30), "- 90°"))
-                TryFunction(-1f);
+                RotateFunction(-1f);
 
             if (GUI.Button(new Rect(1000, 270, 50, 30), "Undo"))
                 Undo();
@@ -184,7 +193,7 @@ public class RoomPlacer : EditorWindow
 
     }
 
-    void TryFunction(float multiplier)
+    void RotateFunction(float multiplier)
     {
         prefabRotation.y += (90f * multiplier);
     }
