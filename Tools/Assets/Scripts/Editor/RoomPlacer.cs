@@ -95,6 +95,10 @@ public class RoomPlacer : EditorWindow
         {
             PlaceRoom();
         }
+        if (Event.current.keyCode == KeyCode.T && Event.current.type == EventType.KeyDown)
+        {
+            EnableTurboMode();
+        }
     }
 
     void DrawGUI()
@@ -340,7 +344,7 @@ public class RoomPlacer : EditorWindow
             DestroyImmediate(lastObject);
         }
     }
-    void activeTurboMode()
+    void EnableTurboMode()
     {
 
         turboMode = !turboMode;
