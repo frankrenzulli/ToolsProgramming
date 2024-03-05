@@ -210,19 +210,13 @@ public class RoomPlacer : EditorWindow
         // Verifica che entrambe le porte siano valide
         if (roomToSpawnDoor != null && roomSelectedDoor != null)
         {
-            //Non capisco perchè anche se il debug.log da come risultato -1, le room non si snappano
-            if(Vector3.Dot(roomToSpawnDoor.transform.forward, roomSelectedDoor.transform.forward) != -1)
-            {
-                // Calcola la differenza di posizione tra le porte
-                Vector3 positionDifference = roomSelectedDoor.transform.position - roomToSpawnDoor.transform.position;
 
-                // Sposta il GameObject "room" in base alla differenza di posizione
-                room.transform.position += positionDifference;
-            }
-            else
-            {
-                Debug.LogError("Snapping non effettuato. Assicurati di aver ruotato la stanza da spawnare in modo idoneo");
-            }
+            // Calcola la differenza di posizione tra le porte
+            Vector3 positionDifference = roomSelectedDoor.transform.position - roomToSpawnDoor.transform.position;
+
+            // Sposta il GameObject "room" in base alla differenza di posizione
+            room.transform.position += positionDifference;
+            
         }
         else
         {
