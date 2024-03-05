@@ -99,11 +99,8 @@ public class RoomPlacer : EditorWindow
     void DrawGUI()
     {
         Handles.BeginGUI();
-
-        //Creo il "canvas" per ogni singolo prefab
         Rect rect = new Rect(160, 8, 100, 100);
         
-
         for (int i = 0; i < prefabs.Length; i++)
         {
             GameObject prefab = prefabs[i];
@@ -141,7 +138,7 @@ public class RoomPlacer : EditorWindow
         Handles.EndGUI();
     }
 
-    //AGGIORNARE FACENDO METODO A PARTE PER CONTROLLARE SE IL RAY HITTA QUALCOSA
+
     Vector3 CameraRaycast()
     {
         Ray ray = HandleUtility.GUIPointToWorldRay(Event.current.mousePosition);
@@ -215,21 +212,21 @@ public class RoomPlacer : EditorWindow
         // Ottieni le porte delle stanze
         GameObject roomToSpawnDoor = GetRoomToSpawnDoor(room);
         GameObject roomSelectedDoor = GetSelectedRoomDoor(Selection.activeGameObject, room);
-        Debug.Log(Vector3.Dot(roomToSpawnDoor.transform.forward, roomSelectedDoor.transform.forward));
-        // Verifica che entrambe le porte siano valide
-        if (roomToSpawnDoor != null && roomSelectedDoor != null)
+        
+        
+        if (roomToSpawnDoor != null || roomSelectedDoor != null)
         {
-
-            // Calcola la differenza di posizione tra le porte
             Vector3 positionDifference = roomSelectedDoor.transform.position - roomToSpawnDoor.transform.position;
-
-            // Sposta il GameObject "room" in base alla differenza di posizione
-            room.transform.position += positionDifference;
-            
+            room.transform.position += positionDifference;           
         }
         else
         {
-            Debug.LogError("Porte non valide. Assicurati di aver assegnato correttamente le porte alle stanze.");
+            Debug.LogError("No doors found. Check the Room's Door");
+        }
+        if (Vector3.Dot(roomToSpawnDoor.transform.forward, roomSelectedDoor.transform.forward) > -1)
+        {
+            Debug.LogError("Prefab not instantiated. Check if the selected room and spawning room rotation value are matchable");
+            DestroyImmediate(room);
         }
     }
 
@@ -252,11 +249,9 @@ public class RoomPlacer : EditorWindow
             doorsList.Clear();
             return nearestDoor;
         }
-        else
-        {
-            Debug.LogWarning("La lista delle porte è vuota.");
-            return null; // o un altro valore di default che abbia senso nel tuo contesto
-        }
+        else           
+            return null; 
+        
     }
 
     GameObject GetRoomToSpawnDoor(GameObject roomPrefab)
