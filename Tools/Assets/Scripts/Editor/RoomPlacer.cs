@@ -23,6 +23,7 @@ public class RoomPlacer : EditorWindow
     [SerializeField] Vector3 prefabRotation = new Vector3(0f,0f,0f);
     private List<GameObject> doorsList;
     private List<GameObject> roomsSpawned = new List<GameObject>();
+    public bool turboMode = false;
     
 
 
@@ -65,7 +66,7 @@ public class RoomPlacer : EditorWindow
     void DuringSceneGUI(SceneView sceneView)
     {
         DrawGUI();
-
+        
         if (Event.current.type == EventType.MouseMove)
         {
             sceneView.Repaint();
@@ -133,6 +134,8 @@ public class RoomPlacer : EditorWindow
             if (GUI.Button(new Rect(1000, 270, 50, 30), "Undo"))
                 Undo();
 
+            turboMode = GUI.Toggle(new Rect(1000, 330, 50, 30), turboMode, "Turbo");
+
         }
 
         Handles.EndGUI();
@@ -182,9 +185,19 @@ public class RoomPlacer : EditorWindow
         GameObject roomToSpawn = (GameObject)PrefabUtility.InstantiatePrefab(prefabs[indexRoom]);
         roomsSpawned.Add(roomToSpawn);
         roomToSpawn.transform.SetPositionAndRotation(CameraRaycast(), Quaternion.Euler(prefabRotation));
+
         if(Selection.activeGameObject != null)
         {
             SnapRoom(roomToSpawn);
+            if (turboMode)
+            {
+                Selection.activeGameObject = roomToSpawn;
+            }
+
+            if (turboMode)
+            {
+                Selection.activeGameObject = roomToSpawn;
+            }
         }
 
 
@@ -212,7 +225,7 @@ public class RoomPlacer : EditorWindow
         // Ottieni le porte delle stanze
         GameObject roomToSpawnDoor = GetRoomToSpawnDoor(room);
         GameObject roomSelectedDoor = GetSelectedRoomDoor(Selection.activeGameObject, room);
-        
+
         
         if (roomToSpawnDoor != null || roomSelectedDoor != null)
         {
@@ -223,11 +236,11 @@ public class RoomPlacer : EditorWindow
         {
             Debug.LogError("No doors found. Check the Room's Door");
         }
-        if (Vector3.Dot(roomToSpawnDoor.transform.forward, roomSelectedDoor.transform.forward) > -1)
+        /*if (Vector3.Dot(roomToSpawnDoor.transform.forward, roomSelectedDoor.transform.forward) > -1)
         {
             Debug.LogError("Prefab not instantiated. Check if the selected room and spawning room rotation value are matchable");
             DestroyImmediate(room);
-        }
+        }*/
     }
 
     GameObject CheckSpawnedNearestDoor()
@@ -326,5 +339,11 @@ public class RoomPlacer : EditorWindow
             roomsSpawned.Remove(lastObject);
             DestroyImmediate(lastObject);
         }
+    }
+    void activeTurboMode()
+    {
+
+        turboMode = !turboMode;
+
     }
 }
